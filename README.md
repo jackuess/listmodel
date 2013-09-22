@@ -33,7 +33,7 @@ Usage
 ...             return 'http://en.wikipedia.org/wiki/Special:BookSources/%s' % value
 ...
 ...     __query__ = '//content/book'
-...     __rowhandler__ = Book
+...     __rowcls__ = Book
 ...
 ...     name = XmlRole('/bookshelf/name/text()')
 ...     random = XmlRole('/hookshelf/name/text()')  # This will not be found and hence given the value None

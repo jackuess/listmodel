@@ -35,6 +35,9 @@ class ContextHolder(object):
                            for role in self._roles])
         return '<%s (%s)>' % (self.__class__.__name__, fields)
 
+    def dict(self):
+        return {role: getattr(self, role) for role in self._roles}
+
 
 class XmlListModel(ContextHolder):
     def __init__(self, source):
@@ -58,7 +61,7 @@ class XmlListModel(ContextHolder):
             raise StopIteration
         else:
             self._curr_row += 1
-            return self.__rowhandler__(context=row)
+            return self.__rowcls__(context=row)
 
 class XmlRole(Role):
     def __init__(self, xpath=None, fget=None):
