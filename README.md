@@ -32,7 +32,7 @@ Usage
 ...         def sources(self, value):
 ...             return 'http://en.wikipedia.org/wiki/Special:BookSources/%s' % value
 ...
-...     __query__ = '//content/book'
+...     __rowquery__ = '//content/book'
 ...     __rowcls__ = Book
 ...
 ...     name = XmlRole('/bookshelf/name/text()')

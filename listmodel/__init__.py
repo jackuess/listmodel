@@ -48,7 +48,7 @@ class XmlListModel(ContextHolder):
         finally:
             context = etree.parse(StringIO(content))
             self._curr_row = 0
-            self._rows = context.xpath(self.__query__)
+            self._rows = context.xpath(self.__rowquery__)
             super(XmlListModel, self).__init__(context)
 
     def __iter__(self):

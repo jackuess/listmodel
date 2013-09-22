@@ -24,7 +24,7 @@ class RssModel(listmodel.XmlListModel):
             timestamp = mktime_tz(parsedate_tz(value))
             return datetime.datetime.utcfromtimestamp(timestamp)
     
-    __query__ = '//item'
+    __rowquery__ = '//item'
     __rowcls__ = RssRow
 
     title = listmodel.XmlRole('//channel/title/text()')
