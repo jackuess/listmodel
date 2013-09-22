@@ -37,14 +37,19 @@ class ContextHolder(object):
 
 
 class XmlListModel(ContextHolder):
-    def __init__(self, url):
-        context = etree.parse(StringIO(requests.get(url).content))
-        super(XmlListModel, self).__init__(context)
+    def __init__(self, source):
+        try:
+            content = requests.get(source).content
+        except requests.exceptions.MissingSchema:
+            content = source
+        finally:
+            context = etree.parse(StringIO(content))
+            super(XmlListModel, self).__init__(context)
 
     def iter(self):
-        rows = self.context.xpath(self.query)
+        rows = self.context.xpath(self.__query__)
         for row in rows:
-            yield self.rowhandler(context=row)
+            yield self.__rowhandler__(context=row)
 
 
 class XmlRole(Role):
@@ -63,7 +68,10 @@ class XmlRole(Role):
     def __get__(self, obj, objtype):
         val = None
         if self.xpath is not None:
-            val = obj.context.xpath(self.xpath)[0]
+            try:
+                val = obj.context.xpath(self.xpath)[0]
+            except IndexError:
+                pass
         if self.fget is not None:
             val = self.fget(obj, val)
         return val
