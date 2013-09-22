@@ -1,4 +1,5 @@
 from cStringIO import StringIO
+import json
 import types
 
 from lxml import etree
@@ -37,6 +38,9 @@ class ContextHolder(object):
 
     def dict(self):
         return {role: getattr(self, role) for role in self._roles}
+
+    def json(self):
+        return json.dumps(self.dict())
 
 
 class XmlListModel(ContextHolder):
