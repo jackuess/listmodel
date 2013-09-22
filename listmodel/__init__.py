@@ -43,18 +43,7 @@ class ContextHolder(object):
         return json.dumps(self.dict())
 
 
-class XmlListModel(ContextHolder):
-    def __init__(self, source):
-        try:
-            content = requests.get(source).content
-        except requests.exceptions.MissingSchema:
-            content = source
-        finally:
-            context = etree.parse(StringIO(content))
-            self._curr_row = 0
-            self._rows = context.xpath(self.__rowquery__)
-            super(XmlListModel, self).__init__(context)
-
+class ListModel(ContextHolder):
     def __iter__(self):
         return self
 
@@ -66,6 +55,24 @@ class XmlListModel(ContextHolder):
         else:
             self._curr_row += 1
             return self.__rowcls__(context=row)
+
+    def saverows(self):
+        for count, row in enumerate(self._rows, start=1):
+            self.__rowcls__(context=row).save()
+        return count
+
+
+class XmlListModel(ListModel):
+    def __init__(self, source):
+        try:
+            content = requests.get(source).content
+        except requests.exceptions.MissingSchema:
+            content = source
+        finally:
+            context = etree.parse(StringIO(content))
+            self._curr_row = 0
+            self._rows = context.xpath(self.__rowquery__)
+            super(XmlListModel, self).__init__(context)
 
 class XmlRole(Role):
     def __init__(self, xpath=None, fget=None):
