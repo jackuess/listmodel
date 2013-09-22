@@ -23,7 +23,7 @@ Usage
 ... </bookshelf>
 ... '''
 >>> class BookshelfModel(XmlListModel):
-...     class ShelfRow(Row):
+...     class Book(Row):
 ...         name = XmlRole('name/text()')
 ...         author = XmlRole('author/text()')
 ...
@@ -33,7 +33,7 @@ Usage
 ...             return 'http://en.wikipedia.org/wiki/Special:BookSources/%s' % value
 ...
 ...     __query__ = '//content/book'
-...     __rowhandler__ = ShelfRow
+...     __rowhandler__ = Book
 ...
 ...     name = XmlRole('/bookshelf/name/text()')
 ...     random = XmlRole('/hookshelf/name/text()')  # This will not be found and hence given the value None
@@ -41,9 +41,9 @@ Usage
 >>> my_shelf = BookshelfModel(xml)  # The first argument to an XmlListModel can be eihter a URL or a string containing XML
 >>> my_shelf
 <BookshelfModel (name='My Bookshelf', random=None)>
->>> for row in my_shelf.iter():
-...     row
+>>> for book in my_shelf.iter():
+...     book
 ... 
-<ShelfRow (sources='http://en.wikipedia.org/wiki/Special:BookSources/978-0-452-28423-4', name='1984', author='George Orwell')>
-<ShelfRow (sources='http://en.wikipedia.org/wiki/Special:BookSources/0679740678', name='The man in the high castle', author='Philip K. Dick')>
+<Book (sources='http://en.wikipedia.org/wiki/Special:BookSources/978-0-452-28423-4', name='1984', author='George Orwell')>
+<Book (sources='http://en.wikipedia.org/wiki/Special:BookSources/0679740678', name='The man in the high castle', author='Philip K. Dick')>
 ```
