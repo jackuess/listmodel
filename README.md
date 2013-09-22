@@ -41,7 +41,7 @@ Usage
 >>> my_shelf = BookshelfModel(xml)  # The first argument to an XmlListModel can be eihter a URL or a string containing XML
 >>> my_shelf
 <BookshelfModel (name='My Bookshelf', random=None)>
->>> for book in my_shelf.iter():
+>>> for book in my_shelf:
 ...     book
 ... 
 <Book (sources='http://en.wikipedia.org/wiki/Special:BookSources/978-0-452-28423-4', name='1984', author='George Orwell')>

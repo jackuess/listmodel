@@ -44,13 +44,21 @@ class XmlListModel(ContextHolder):
             content = source
         finally:
             context = etree.parse(StringIO(content))
+            self._curr_row = 0
+            self._rows = context.xpath(self.__query__)
             super(XmlListModel, self).__init__(context)
 
-    def iter(self):
-        rows = self.context.xpath(self.__query__)
-        for row in rows:
-            yield self.__rowhandler__(context=row)
+    def __iter__(self):
+        return self
 
+    def next(self):
+        try:
+            row = self._rows[self._curr_row]
+        except IndexError:
+            raise StopIteration
+        else:
+            self._curr_row += 1
+            return self.__rowhandler__(context=row)
 
 class XmlRole(Role):
     def __init__(self, xpath=None, fget=None):
