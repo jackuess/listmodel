@@ -24,8 +24,8 @@ class RssModel(listmodel.XmlListModel):
             timestamp = mktime_tz(parsedate_tz(value))
             return datetime.datetime.utcfromtimestamp(timestamp)
     
-    query = '//item'
-    rowhandler = RssRow
+    __query__ = '//item'
+    __rowhandler__ = RssRow
 
     title = listmodel.XmlRole('//channel/title/text()')
     fetch_time = listmodel.Role(
