@@ -32,6 +32,10 @@ Usage
 ...         def sources(self, value):
 ...             return 'http://en.wikipedia.org/wiki/Special:BookSources/%s' % value
 ...
+...         @Role
+...         def title(self):
+...             return '%s by %s' % (self.name, self.author)
+...
 ...     __rowquery__ = '//content/book'
 ...     __rowcls__ = Book
 ...
