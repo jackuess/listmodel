@@ -1,6 +1,6 @@
-List Model
+Listmodel
 ============
-List Model is a Python library for building iterators for various list sources (XML documents, Text documents, JSON objects etc.) in a unified manner. Inspiration was taken from [Qt QML:s](http://en.wikipedia.org/wiki/QML) [XmlListModel](http://qt-project.org/doc/qt-4.8/qml-xmllistmodel.html).
+Listmodel is a Python library for building iterators for various list sources (XML documents, Text documents, JSON objects etc.) in a unified manner. Inspiration was taken from [Qt QML:s](http://en.wikipedia.org/wiki/QML) [XmlListModel](http://qt-project.org/doc/qt-4.8/qml-xmllistmodel.html).
 
 Usage
 -----
