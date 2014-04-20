@@ -108,6 +108,12 @@ class ListModel(ContextHolder):
             self._next_row += 1
             return self.__rowcls__(context=row)
 
+    def __len__(self):
+        return len(self._rows)
+
+    def __getitem__(self, i):
+        return self.__rowcls__(context=self._rows[i])
+
     def saverows(self):
         for count, row in enumerate(self._rows, start=1):
             self.__rowcls__(context=row).save()
