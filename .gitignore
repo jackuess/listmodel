@@ -1,3 +1,8 @@
-*.pyc
-jacques/
+*.py[co]
 listmodel.egg-info/
+.tox
+env/
+.eggs/
+__pycache__/
+MANIFEST
+docs/_build

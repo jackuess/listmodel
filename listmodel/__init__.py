@@ -1,4 +1,14 @@
-from _listmodel import Role, Row
-from models.xml_model import XmlListModel, XmlRole, HtmlListModel, HtmlRole
-from models.json_model import JsonListModel, JsonRole
-from models.re_model import ReListModel, ReRole
+from pkg_resources import get_distribution
+
+__author__ = "Jacques de Laval"
+__project__ = "listmodel"
+__version__ = get_distribution(__project__).version
+
+from .models import (  # noqa
+    CsvRow,
+    JSONDoc,
+    QueryAttr,
+    set_name,
+    XMLDoc,
+    YAMLDoc
+)
