@@ -97,7 +97,10 @@ class XMLDoc(object):
             #     xpath = ".{}".format(xpath)
             nodes = self.doc.xpath(xpath)
             if nodes:
-                return nodes[0]
+                if len(nodes) == 1:
+                    return nodes[0]
+                else:
+                    return nodes
 
         def set_iterables(self, query):
             self.iterables = iter(self.doc.xpath(query))

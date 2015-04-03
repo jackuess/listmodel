@@ -22,6 +22,7 @@ class TestXMLDoc(unittest.TestCase):
             isbn = QueryAttr("isbn/text()")
             title = QueryAttr("title/text()")
             author = QueryAttr("author/text()")
+            chapters = QueryAttr("chapter[@id]/text()")
 
             @QueryAttr("author/text()")
             def author_first_name(self, value):
@@ -48,6 +49,7 @@ class TestXMLDoc(unittest.TestCase):
             <chapter id="1">...</chapter>
             <chapter id="2">...</chapter>
             <chapter id="3">...</chapter>
+            <chapter>...</chapter>
         </book>
         <book>
             <title>The man in the high castle</title>
@@ -78,6 +80,7 @@ class TestXMLDoc(unittest.TestCase):
         self.assertEqual(books[0].author_last_name, "Orwell")
         for i, chapter in enumerate(books[0], start=1):
             self.assertEqual(chapter.text, "...")
+        self.assertEqual(books[0].chapters, ["..."] * 3)
         self.assertEqual(books[1].isbn, "0679740678")
         self.assertEqual(books[1].title, "The man in the high castle")
         self.assertEqual(books[1].author, "Dick, Philip K.")
