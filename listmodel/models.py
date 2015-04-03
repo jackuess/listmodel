@@ -1,3 +1,5 @@
+import re
+
 try:
     import ujson as json
 except ImportError:
@@ -187,6 +189,35 @@ class YAMLDoc(JSONDoc):
         @classmethod
         def fromstring(cls, string):
             return cls.fromfile(string)
+
+
+class TextDoc(XMLDoc):
+    class DocumentProxy(object):
+        def __init__(self, doc):
+            self.doc = doc
+
+        @classmethod
+        def fromfile(cls, doc):
+            return cls(doc.read())
+
+        @classmethod
+        def fromstring(cls, doc):
+            return cls(doc)
+
+        def execute_query(self, regexp):
+            matches = re.findall(regexp, self.doc, re.DOTALL)
+            if matches:
+                return matches[0]
+
+        def set_iterables(self, regexp):
+            self.iterables = re.finditer(regexp, self.doc, re.DOTALL)
+
+        def get_next_iterable(self):
+            next_match = next(self.iterables)
+            try:
+                return next_match.group(1)
+            except IndexError:
+                return next_match.group(0)
 
 
 def set_name(name):

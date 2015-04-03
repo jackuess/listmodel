@@ -1,38 +1,36 @@
 import io
 import unittest
 
-from listmodel import XMLDoc, QueryAttr
+from listmodel import TextDoc, QueryAttr
 
 from ..utils import TestCaseMixin
 
 
-class TestXMLDoc(TestCaseMixin, unittest.TestCase):
-    class Bookshelf(XMLDoc):
-        class Iterable(XMLDoc):
-            __name__ = "Book"
-            __query__ = "/bookshelf/book"
+class TestTextDoc(TestCaseMixin, unittest.TestCase):
+    class Bookshelf(TextDoc):
+        class Iterable(TextDoc):
+            __query__ = "<book>(.*?)</book>"
 
-            class Iterable(XMLDoc):
-                __query__ = "chapter"
+            class Iterable(TextDoc):
+                __query__ = "<chapter[^>]*>.*?</chapter>"
 
-                id = QueryAttr("@id")
-                text = QueryAttr("text()")
+                id = QueryAttr('<chapter[^>]+id="([^\"]*)"')
+                text = QueryAttr(">(.*)</chapter>")
 
-            isbn = QueryAttr("isbn/text()")
-            title = QueryAttr("title/text()")
-            author = QueryAttr("author/text()")
-            chapters = QueryAttr("chapter[@id]/text()")
+            isbn = QueryAttr("<isbn>(.*?)</isbn>")
+            title = QueryAttr("<title>(.*?)</title>")
+            author = QueryAttr("<author>(.*?)</author>")
 
-            @QueryAttr("author/text()")
+            @QueryAttr("<author>(.*?)</author>")
             def author_first_name(self, value):
                 return value.split(", ")[1]
 
-            @QueryAttr("author/text()")
+            @QueryAttr("<author>(.*?)</author>")
             def author_last_name(self, value):
                 return value.split(", ")[0]
 
-        name = QueryAttr("/bookshelf/name/text()")
-        undefined = QueryAttr("/bookshelf/undefined/text()")
+        name = QueryAttr("<name>(.*?)</name>")
+        undefined = QueryAttr("<undefined>(.*?)</undefined>")
 
     xml = u"""<bookshelf>
         <name>My Bookshelf</name>
@@ -48,7 +46,6 @@ class TestXMLDoc(TestCaseMixin, unittest.TestCase):
             <chapter id="1">...</chapter>
             <chapter id="2">...</chapter>
             <chapter id="3">...</chapter>
-            <chapter>...</chapter>
         </book>
         <book>
             <title>The man in the high castle</title>
@@ -67,7 +64,7 @@ class TestXMLDoc(TestCaseMixin, unittest.TestCase):
         self.assertRegex(
             repr(shelf),
             r"^<Bookshelf \(({0}, {1}|({1}, {0}))\)>$".format(
-                "name='My Bookshelf'", "undefined=None")
+                "name=u?'My Bookshelf'", "undefined=None")
         )
         self.assertEqual(repr(shelf), str(shelf))
 
@@ -77,9 +74,10 @@ class TestXMLDoc(TestCaseMixin, unittest.TestCase):
         self.assertEqual(books[0].author, "Orwell, George")
         self.assertEqual(books[0].author_first_name, "George")
         self.assertEqual(books[0].author_last_name, "Orwell")
-        for i, chapter in enumerate(books[0], start=1):
+        chapters = list(books[0])
+        self.assertEqual(len(chapters), 3)
+        for i, chapter in enumerate(chapters, start=1):
             self.assertEqual(chapter.text, "...")
-        self.assertEqual(books[0].chapters, ["..."] * 3)
         self.assertEqual(books[1].isbn, "0679740678")
         self.assertEqual(books[1].title, "The man in the high castle")
         self.assertEqual(books[1].author, "Dick, Philip K.")

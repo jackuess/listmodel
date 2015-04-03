@@ -9,6 +9,7 @@ from .models import (  # noqa
     JSONDoc,
     QueryAttr,
     set_name,
+    TextDoc,
     XMLDoc,
     YAMLDoc
 )
