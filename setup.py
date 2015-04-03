@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.rst")) as readme:
 
 setup(
     name="listmodel",
-    version="0.2.0",
+    version="0.2.1",
     description="Listmodel is a Python library for object mappings for "
                 "various list sources (XML documents, CSV documents, text "
                 "documents, JSON/YAML objects) in a unified manner.",
