@@ -205,9 +205,19 @@ class TextDoc(XMLDoc):
             return cls(doc)
 
         def execute_query(self, regexp):
-            matches = re.findall(regexp, self.doc, re.DOTALL)
+            def groupdict_or_groups(match):
+                groupdict = match.groupdict()
+                if groupdict:
+                    return match.groupdict()
+                return match.groups()
+
+            matches = list(re.finditer(regexp, self.doc, re.DOTALL))
             if matches:
-                return matches[0]
+                if len(matches) == 1:
+                    return first_or_all(groupdict_or_groups(matches[0]))
+                else:
+                    return map(first_or_all, [groupdict_or_groups(match)
+                                              for match in matches])
 
         def set_iterables(self, regexp):
             self.iterables = re.finditer(regexp, self.doc, re.DOTALL)
@@ -218,6 +228,12 @@ class TextDoc(XMLDoc):
                 return next_match.group(1)
             except IndexError:
                 return next_match.group(0)
+
+
+def first_or_all(subject):
+    if len(subject) == 1:
+        return subject[0]
+    return subject
 
 
 def set_name(name):

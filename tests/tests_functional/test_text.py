@@ -20,6 +20,9 @@ class TestTextDoc(TestCaseMixin, unittest.TestCase):
             isbn = QueryAttr("<isbn>(.*?)</isbn>")
             title = QueryAttr("<title>(.*?)</title>")
             author = QueryAttr("<author>(.*?)</author>")
+            revisions = QueryAttr("<rev>(\d+)</rev>")
+            name_tuple = QueryAttr("<author>([^,]+),\s*(.+?)</author>")
+            name_dict = QueryAttr("<author>(?P<lastname>[^,]+),\s*(?P<firstname>.+?)</author>")
 
             @QueryAttr("<author>(.*?)</author>")
             def author_first_name(self, value):
@@ -74,6 +77,9 @@ class TestTextDoc(TestCaseMixin, unittest.TestCase):
         self.assertEqual(books[0].author, "Orwell, George")
         self.assertEqual(books[0].author_first_name, "George")
         self.assertEqual(books[0].author_last_name, "Orwell")
+        self.assertEqual(list(books[0].revisions), ["1", "2", "3"])
+        self.assertEqual(books[0].name_tuple, ("Orwell", "George"))
+        self.assertEqual(books[0].name_dict, {"lastname": "Orwell", "firstname": "George"})
         chapters = list(books[0])
         self.assertEqual(len(chapters), 3)
         for i, chapter in enumerate(chapters, start=1):
